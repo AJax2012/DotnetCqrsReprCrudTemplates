@@ -1,0 +1,8 @@
+using System;
+
+namespace {{solutionName}}.Contracts.{{name}}.Responses;
+
+/// <summary>
+/// Response for getting a paginated list of {{name}}s.
+/// </summary>
+public record Get{{name}}sResponse(Guid id);

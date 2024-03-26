@@ -1,0 +1,8 @@
+using System;
+
+namespace {{solutionName}}.Contracts.{{name}}.Responses;
+
+/// <summary>
+/// Response for getting a {{name}} by Id.
+/// </summary>
+public record Get{{name}}ByIdResponse(Guid Id);

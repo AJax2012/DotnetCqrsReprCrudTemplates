@@ -1,0 +1,19 @@
+using System;
+using System.Diagnostics.CodeAnalysis;
+using Swashbuckle.AspNetCore.Filters;
+using {{solutionName}}.Contracts.{{name}}.Responses;
+
+namespace {{solutionName}}.Contracts.{{name}}.Examples;
+
+/// <summary>
+/// Example for <see cref="Get{{name}}sResponse"/>.
+/// </summary>
+[ExcludeFromCodeCoverage(Justification = "Examples cannot be tested.")]
+public class Get{{name}}sResponseExample : IExamplesProvider<Get{{name}}sResponse>
+{
+    /// <inheritdoc />
+    public Get{{name}}sResponse GetExamples()
+    {
+        return new Get{{name}}sResponse(Guid.NewGuid());
+    }
+}

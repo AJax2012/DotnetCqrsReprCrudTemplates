@@ -1,0 +1,12 @@
+using FluentValidation;
+
+using {{solutionName}}.Contracts.{{name}}.Requests;
+
+namespace {{solutionName}}.Contracts.{{name}}.Validators;
+
+public partial class Update{{name}}RequestValidator : AbstractValidator<Update{{name}}Request>
+{
+    public Update{{name}}RequestValidator()
+    {
+    }
+}

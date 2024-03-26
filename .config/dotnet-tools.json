@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "ajax2012.cqrs-templates": {
+      "version": "1.0.0",
+      "commands": [
+        "generateEndpointTemplates"
+      ]
+    }
+  }
+}

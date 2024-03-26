@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7E6EDDB1-76A0-4D92-A65C-D7D5777AEE0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotnetCqrsClassTemplatesUtility.Console", "src\Console\DotnetCqrsClassTemplatesUtility.Console.csproj", "{45D8EF33-8CC6-4DE1-8E13-3739B850EC6D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D46B06B6-1BD4-4AA2-B5D4-166548838F4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotnetCqrsClassTemplatesUtility.Console.Test", "test\DotnetCqrsClassTemplatesUtility.Console.Test\DotnetCqrsClassTemplatesUtility.Console.Test.csproj", "{664FB337-76A4-41B6-84E1-1E22B908A150}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45D8EF33-8CC6-4DE1-8E13-3739B850EC6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45D8EF33-8CC6-4DE1-8E13-3739B850EC6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45D8EF33-8CC6-4DE1-8E13-3739B850EC6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45D8EF33-8CC6-4DE1-8E13-3739B850EC6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{664FB337-76A4-41B6-84E1-1E22B908A150}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{664FB337-76A4-41B6-84E1-1E22B908A150}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{664FB337-76A4-41B6-84E1-1E22B908A150}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{664FB337-76A4-41B6-84E1-1E22B908A150}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{45D8EF33-8CC6-4DE1-8E13-3739B850EC6D} = {7E6EDDB1-76A0-4D92-A65C-D7D5777AEE0A}
+		{664FB337-76A4-41B6-84E1-1E22B908A150} = {D46B06B6-1BD4-4AA2-B5D4-166548838F4D}
+	EndGlobalSection
+EndGlobal

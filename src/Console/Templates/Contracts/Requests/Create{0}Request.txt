@@ -1,0 +1,6 @@
+namespace {{solutionName}}.Contracts.{{name}}.Requests;
+
+/// <summary>
+/// Request to create a new {{name}}.
+/// </summary>
+public record Create{{name}}Request();

@@ -1,0 +1,20 @@
+using System.Diagnostics.CodeAnalysis;
+
+using Swashbuckle.AspNetCore.Filters;
+
+using {{solutionName}}.Contracts.{{name}}.Requests;
+
+namespace {{solutionName}}.Contracts.{{name}}.Examples;
+
+/// <summary>
+/// Example for <see cref="Create{{name}}Request"/>.
+/// </summary>
+[ExcludeFromCodeCoverage(Justification = "Examples cannot be tested.")]
+public class Create{{name}}RequestExample : IExamplesProvider<Create{{name}}Request>
+{
+    /// <inheritdoc />
+    public Create{{name}}Request GetExamples()
+    {
+        return new Create{{name}}Request();
+    }
+}

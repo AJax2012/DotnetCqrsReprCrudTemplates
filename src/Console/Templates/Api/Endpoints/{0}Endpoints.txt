@@ -1,0 +1,62 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+
+using {{solutionName}}.Api.Endpoints.Common;
+using {{solutionName}}.Contracts.{{name}}.Requests;
+using {{solutionName}}.Contracts.{{name}}.Responses;
+
+namespace {{solutionName}}.Api.Endpoints.{{name}};
+
+/// <summary>
+/// Defines {{name}} endpoints.
+/// </summary>
+public class {{name}}Endpoints : IEndpoint
+{
+    private const string BaseUrl = "api/{{name|lower}}s";
+    private const string ContentType = "application/json";
+    private readonly static string[] Tag = ["{{name}}"];
+    
+    /// <summary>
+    /// Maps {{name}} endpoints.
+    /// </summary>
+    /// <param name="endpoints"><see cref="IEndpointRouteBuilder"/>.</param>
+    public static void DefineEndpoints(IEndpointRouteBuilder endpoints)
+    {
+        var {{name|lower}}s = endpoints.MapGroup(BaseUrl);
+            
+        {{name|lower}}s.MapPost("/", Create{{name}}.HandleAsync)
+            .Accepts<Create{{name}}Request>(ContentType)
+            .Produces(StatusCodes.Status201Created)
+            .ProducesValidationProblem(StatusCodes.Status400BadRequest, ContentType)
+            .ProducesProblem(StatusCodes.Status409Conflict, ContentType)
+            .WithName("Create{{name}}")
+            .WithTags(Tag);
+        
+        {{name|lower}}s.MapGet("{id:guid}", Get{{name}}ById.HandleAsync)
+            .Produces<Get{{name}}ByIdResponse>(StatusCodes.Status200OK, ContentType)
+            .ProducesProblem(StatusCodes.Status404NotFound, ContentType)
+            .WithName("Get{{name}}ById")
+            .WithTags(Tag);
+            
+        {{name|lower}}s.MapGet("/", Get{{name}}s.HandleAsync)
+            .Produces<Get{{name}}sResponse>(StatusCodes.Status200OK, ContentType)
+            .ProducesProblem(StatusCodes.Status404NotFound, ContentType)
+            .WithName("Get{{name}}s")
+            .WithTags(Tag);
+            
+        {{name|lower}}s.MapPut("{id:guid}", Update{{name}}.HandleAsync)
+            .Accepts<Update{{name}}Request>(ContentType)
+            .Produces(StatusCodes.Status204NoContent)
+            .ProducesValidationProblem(StatusCodes.Status400BadRequest, ContentType)
+            .ProducesProblem(StatusCodes.Status404NotFound, ContentType)
+            .WithName("Update{{name}}")
+            .WithTags(Tag);
+            
+        {{name|lower}}s.MapDelete("{id:guid}", Delete{{name}}.HandleAsync)
+            .Produces(StatusCodes.Status204NoContent)
+            .ProducesProblem(StatusCodes.Status404NotFound, ContentType)
+            .WithName("Delete{{name}}")
+            .WithTags(Tag);
+    }
+}

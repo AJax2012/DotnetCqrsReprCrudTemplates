@@ -1,0 +1,75 @@
+using System;
+using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Linq;
+
+using ErrorOr;
+using FluentValidation;
+using FluentValidation.Results;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+
+using {{solutionName}}.Api.Endpoints.Common;
+using {{solutionName}}.Contracts.{{name}}.Requests;
+
+namespace {{solutionName}}.Api.Endpoints.{{name}};
+
+/// <summary>
+/// Endpoint handler for updating a {{name}}.
+/// </summary>
+public static class Update{{name}}
+{
+    /// <summary>
+    /// API request for updating a {{name}}.
+    /// </summary>
+    /// <param name="id">Unique id for {{name}}.</param>
+    /// <param name="request"><see cref="Update{{name}}Request"/>.</param>
+    /// <param name="user"><see cref="ClaimsPrincipal"/>. Logged in user.</param>
+    /// <param name="mediator"><see cref="ISender"/>.</param>
+    /// <param name="validator">Validator for <see cref="Update{{name}}Request"/>.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+    /// <returns><see cref="IResult"/>.</returns>
+    public async static Task<IResult> HandleAsync(
+        [FromRoute] Guid id,
+        [FromBody] Update{{name}}Request request,
+        ClaimsPrincipal user,
+        [FromServices] ISender mediator,
+        [FromServices] IValidator<Update{{name}}Request> validator, 
+        CancellationToken cancellationToken)
+    {
+        if (!Guid.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out var userId) && userId != Guid.Empty)
+        {
+            return Results.Unauthorized();
+        }
+    
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        
+        if (id == Guid.Empty)
+        {
+            validationResult.Errors.Add(new ValidationFailure("Update{{name}}.IdRequired", "Id is required"));
+        }
+        
+        if (!validationResult.IsValid)
+        {
+            var errors = validationResult.Errors
+                .Select(e => Error.Validation(e.ErrorCode, e.ErrorMessage))
+                .ToList();
+                
+            return errors.ToProblemDetailsResult();
+        }
+
+        // var command = new Update{{name}}Command
+        // {
+        // };
+
+        // var result = await mediator.Send(command, cancellationToken);
+        
+        // return response.Match(
+        //     _ => Results.NoContent(),
+        //     errors => errors.ToProblemDetailsResult()
+        // );
+        return Results.NoContent();
+    }
+}

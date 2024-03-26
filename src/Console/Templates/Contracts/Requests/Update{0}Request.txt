@@ -1,0 +1,6 @@
+namespace {{solutionName}}.Contracts.{{name}}.Requests;
+
+/// <summary>
+/// Request to update a {{name}}.
+/// </summary>
+public record Update{{name}}Request();

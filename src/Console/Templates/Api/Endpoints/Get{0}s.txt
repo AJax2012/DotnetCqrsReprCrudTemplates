@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
+
+using ErrorOr;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+
+namespace {{solutionName}}.Api.Endpoints.{{name}};
+
+/// <summary>
+/// Endpoint handler for getting a paginated list of {{name}}.
+/// </summary>
+public static class Get{{name}}s
+{
+    /// <summary>
+    /// API request for getting a paginated list of {{name}}.
+    /// </summary>
+    /// <param name="limit">Number of results to retrieve.</param>
+    /// <param name="orderBy">List of properties to order results by.</param>
+    /// <param name="isDescending">Sets orderBy to descending or ascending (descending by default).</param>
+    /// <param name="user"><see cref="ClaimsPrincipal"/>. Logged in user.</param>
+    /// <param name="mediator"><see cref="ISender"/>.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+    /// <returns><see cref="IResult"/>.</returns>
+    public async static Task<IResult> HandleAsync(
+        [FromQuery] int? limit,
+        [FromQuery] List<string>? orderBy,
+        [FromQuery(Name = "desc")] bool? isDescending,
+        ClaimsPrincipal user,
+        [FromServices] ISender mediator,
+        CancellationToken cancellationToken)
+    {
+        if (!Guid.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out var userId) && userId != Guid.Empty)
+        {
+            return Results.Unauthorized();
+        }
+
+        // var query = new Get{{name}}sPaginatedQuery
+        // {
+        //      UserId = userId,
+        //      Limit = limit ?? 10,
+        //      OrderBy = orderBy ?? new List<string>(),
+        //      IsDescending = isDescending ?? true
+        //};
+        
+        // var result = await mediator.Send(query, cancellationToken);
+        
+        // return response.Match(
+        //     {{name|lower}} => Results.Ok({{name|lower}}.ToResponse()),
+        //     errors => errors.ToProblemDetailsResult()
+        // );
+        return Results.Ok();
+    }
+}

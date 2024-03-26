@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
+
+using ErrorOr;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+
+using CqrsTest.Api.Endpoints.Common;
+
+using {{solutionName}}.Api.Endpoints.Common;
+
+namespace {{solutionName}}.Api.Endpoints.{{name}};
+
+/// <summary>
+/// Endpoint handler for getting a {{name}} by id.
+/// </summary>
+public static class Get{{name}}ById
+{
+    /// <summary>
+    /// API request for getting a {{name}} by id.
+    /// </summary>
+    /// <param name="id">Unique id for {{name}}.</param>
+    /// <param name="user"><see cref="ClaimsPrincipal"/>. Logged in user.</param>
+    /// <param name="mediator"><see cref="ISender"/>.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+    /// <returns><see cref="IResult"/>.</returns>
+    public async static Task<IResult> HandleAsync(
+        [FromRoute] Guid id,
+        ClaimsPrincipal user,
+        [FromServices] ISender mediator,
+        CancellationToken cancellationToken)
+    {
+        if (!Guid.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out var userId) && userId != Guid.Empty)
+        {
+            return Results.Unauthorized();
+        }
+        
+        if (id == Guid.Empty)
+        {
+            var error = Error.Validation(code: "Get{{name}}ById.IdRequired", description: "Id is required.");
+            return new List<Error> { error }.ToProblemDetailsResult();
+        }
+
+        // var query = new Get{{name}}ByIdQuery(id, userId);
+        // var result = await mediator.Send(query, cancellationToken);
+        
+        // return response.Match(
+        //     {{name|lower}} => Results.Ok({{name|lower}}.ToResponse()),
+        //     _ => Results.NotFound(new { id = id })
+        // );
+        return Results.Ok();
+    }
+}
