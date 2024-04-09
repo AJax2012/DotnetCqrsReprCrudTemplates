@@ -41,8 +41,6 @@ public sealed class Update{{name}}CommandHandler : IRequestHandler<Update{{name}
             return {{name}}Error.NotFound;
         }
         
-        // TODO: Update the {{name}} properties here.
-        
         await _{{name|lower|plural}}Repository.UpdateAsync({{name|lower}}, cancellationToken);
         return Result.Updated;
     }
