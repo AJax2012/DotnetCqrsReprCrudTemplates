@@ -3,6 +3,6 @@ using System;
 namespace {{solutionName}}.Contracts.{{name|plural}}.Responses;
 
 /// <summary>
-/// Response for getting a {{name}} by Id.
+/// {{name}} list item Resource.
 /// </summary>
-public record Get{{name}}ByIdResponse(Guid Id);
+public record {{name}}Resource(Guid Id);

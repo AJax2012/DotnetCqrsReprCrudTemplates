@@ -1,0 +1,34 @@
+using System.Threading;
+using System.Threading.Tasks;
+
+using AutoBogus;
+using ErrorOr;
+using FluentAssertions;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+using Serilog;
+using Xunit;
+
+using {{solutionName}}.Application.Common.Contracts.Persistence;
+using {{solutionName}}.Application.{{name|plural}}.Commands.Update;
+
+namespace {{solutionName}}.Application.Unit.Test.{{name}}.Commands;
+
+/// <summary>
+/// Tests for <see cref="Update{{name}}CommandHandler"/>.
+/// </summary>
+public class Update{{name}}CommandHandlerTest
+{
+    private readonly Update{{name}}CommandHandler _sut;
+    private readonly I{{name|plural}}Repository _{{name|lower|plural}}Repository = Substitute.For<I{{name|plural}}Repository>();
+    private readonly ILogger _logger = Substitute.For<ILogger>();
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Update{{name}}CommandHandlerTest"/> class.
+    /// </summary>
+    public Update{{name}}CommandHandlerTest()
+    {
+        _sut = new Update{{name}}CommandHandler(_{{name|lower|plural}}Repository, _logger);
+    }
+}
+

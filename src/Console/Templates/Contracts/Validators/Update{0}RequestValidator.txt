@@ -1,11 +1,13 @@
 using FluentValidation;
 
-using {{solutionName}}.Contracts.{{name}}.Requests;
+using {{solutionName}}.Contracts.{{name|plural}}.Requests;
 
-namespace {{solutionName}}.Contracts.{{name}}.Validators;
+namespace {{solutionName}}.Contracts.{{name|plural}}.Validators;
 
+/// <inheritdoc />
 public partial class Update{{name}}RequestValidator : AbstractValidator<Update{{name}}Request>
 {
+    /// <inheritdoc />
     public Update{{name}}RequestValidator()
     {
     }

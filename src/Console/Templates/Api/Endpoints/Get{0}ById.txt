@@ -9,11 +9,11 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
-using CqrsTest.Api.Endpoints.Common;
-
 using {{solutionName}}.Api.Endpoints.Common;
+using {{solutionName}}.Application.{{name|plural}}.Queries.GetById;
+using {{solutionName}}.Contracts.{{name|plural}}.Responses;
 
-namespace {{solutionName}}.Api.Endpoints.{{name}};
+namespace {{solutionName}}.Api.Endpoints.{{name|plural}};
 
 /// <summary>
 /// Endpoint handler for getting a {{name}} by id.
@@ -45,13 +45,11 @@ public static class Get{{name}}ById
             return new List<Error> { error }.ToProblemDetailsResult();
         }
 
-        // var query = new Get{{name}}ByIdQuery(id, userId);
-        // var result = await mediator.Send(query, cancellationToken);
+        var query = new Get{{name}}ByIdQuery(id, userId);
+        var result = await mediator.Send(query, cancellationToken);
         
-        // return response.Match(
-        //     {{name|lower}} => Results.Ok({{name|lower}}.ToResponse()),
-        //     _ => Results.NotFound(new { id = id })
-        // );
-        return Results.Ok();
+        return result.Match(
+            {{name|lower}} => Results.Ok({{name|lower}}.ToResponse()),
+            _ => Results.NotFound(new { id = id }));
     }
 }

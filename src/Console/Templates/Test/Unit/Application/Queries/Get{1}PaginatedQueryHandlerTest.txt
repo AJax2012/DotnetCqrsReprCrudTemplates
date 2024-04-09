@@ -1,0 +1,44 @@
+using System.Threading;
+using System.Threading.Tasks;
+
+using AutoBogus;
+using ErrorOr;
+using FluentAssertions;
+using NSubstitute;
+using NSubstitute.ReceivedExtensions;
+using Serilog;
+using Xunit;
+
+using {{solutionName}}.Application.Common.Contracts.Persistence;
+using {{solutionName}}.Application.{{name|plural}}.Queries.GetPaginated;
+
+namespace {{solutionName}}.Application.Unit.Test.{{name|plural}}.Queries;
+
+/// <summary>
+/// Tests for <see cref="Get{{name|plural}}PaginatedQueryHandler"/>
+/// </summary>
+public class Get{{name|plural}}PaginatedQueryHandlerTest
+{
+	private readonly Get{{name|plural}}PaginatedQueryHandler _sut;
+	private readonly I{{name|plural}}Repository _{{name|lower|plural}}Repository = Substitute.For<I{{name|plural}}Repository>();
+	private readonly ILogger _logger = Substitute.For<ILogger>();
+	
+	/// <summary>
+    /// Initializes a new instance of the <see cref="Get{{name|plural}}PaginatedQueryHandlerTest"/> class.
+    /// </summary>
+    public Get{{name|plural}}PaginatedQueryHandlerTest()
+    {
+        _sut = new Get{{name|plural}}PaginatedQueryHandler(_{{name|lower|plural}}Repository, _logger);
+    }
+
+    /// <summary>
+    /// Should call GetPaginatedListAsync.
+    /// </summary>
+    [Fact]
+    public async Task Handle_ShouldCallGetPaginatedListAsync()
+    {
+        var request = new AutoFaker<Get{{name|plural}}PaginatedQuery>().Generate();
+        await _sut.Handle(request, CancellationToken.None);
+        await _{{name|lower|plural}}Repository.Received(1).GetPaginatedListAsync(request, CancellationToken.None);
+    }
+}

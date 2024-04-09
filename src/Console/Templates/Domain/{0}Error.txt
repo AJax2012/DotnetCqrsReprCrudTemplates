@@ -1,0 +1,14 @@
+using ErrorOr;
+
+namespace {{solutionName}}.Domain.{{name}}AggregateRoot;
+
+/// <summary>
+/// List of Domain <see cref="Error"/>s for <see cref="{{name}}"/>.
+/// </summary>
+public static class {{name}}Error
+{
+    /// <summary>
+    /// {{name}} was not found.
+    /// </summary>
+    public readonly static Error NotFound = Error.NotFound("{{name}}.NotFound", "{{name}} was not found.");
+}

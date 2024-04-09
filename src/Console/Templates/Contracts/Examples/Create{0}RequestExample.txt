@@ -2,9 +2,9 @@ using System.Diagnostics.CodeAnalysis;
 
 using Swashbuckle.AspNetCore.Filters;
 
-using {{solutionName}}.Contracts.{{name}}.Requests;
+using {{solutionName}}.Contracts.{{name|plural}}.Requests;
 
-namespace {{solutionName}}.Contracts.{{name}}.Examples;
+namespace {{solutionName}}.Contracts.{{name|plural}}.Examples;
 
 /// <summary>
 /// Example for <see cref="Create{{name}}Request"/>.

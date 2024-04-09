@@ -1,9 +1,10 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Swashbuckle.AspNetCore.Filters;
-using {{solutionName}}.Contracts.{{name}}.Responses;
 
-namespace {{solutionName}}.Contracts.{{name}}.Examples;
+using {{solutionName}}.Contracts.{{name|plural}}.Responses;
+
+namespace {{solutionName}}.Contracts.{{name|plural}}.Examples;
 
 /// <summary>
 /// Example for <see cref="Get{{name}}ByIdResponse"/>.

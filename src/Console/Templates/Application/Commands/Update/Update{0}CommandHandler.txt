@@ -1,0 +1,50 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+using ErrorOr;
+using MediatR;
+using Serilog;
+
+using {{solutionName}}.Application.Common.Contracts.Persistence;
+using {{solutionName}}.Domain.{{name}}AggregateRoot;
+
+namespace {{solutionName}}.Application.{{name|plural}}.Commands.Update;
+
+/// <summary>
+/// Handler for deleting a <see cref="{{name}}"/>.
+/// </summary>
+public sealed class Update{{name}}CommandHandler : IRequestHandler<Update{{name}}Command, ErrorOr<Updated>>
+{
+    private readonly I{{name|plural}}Repository _{{name|lower|plural}}Repository;
+    private readonly ILogger _logger;
+
+    /// <summary>
+	/// Initializes a new instance of the <see cref="Update{{name}}CommandHandler"/> class.
+	/// </summary>
+	/// <param name="{{name|lower|plural}}Repository"><see cref="I{{name|plural}}Repository"/>.</param>
+	/// <param name="logger"><see cref="ILogger"/>.</param>
+    public Update{{name}}CommandHandler(I{{name|plural}}Repository {{name|lower|plural}}Repository, ILogger logger)
+    {
+        _{{name|lower|plural}}Repository = {{name|lower|plural}}Repository;
+        _logger = logger;
+    }
+    
+    /// <inheritdoc />
+    public async Task<ErrorOr<Updated>> Handle(Update{{name}}Command request, CancellationToken cancellationToken)
+    {
+        var {{name|lower}} = await _{{name|lower|plural}}Repository.GetByIdAsync(request.{{name}}Id, cancellationToken);
+                
+        if ({{name|lower}} is null)
+        {
+            _logger.Error("{{name}} not found with id {{{name}}Id}.", request.{{name}}Id);
+            return {{name}}Error.NotFound;
+        }
+        
+        // TODO: Update the {{name}} properties here.
+        
+        await _{{name|lower|plural}}Repository.UpdateAsync({{name|lower}}, cancellationToken);
+        return Result.Updated;
+    }
+}
+

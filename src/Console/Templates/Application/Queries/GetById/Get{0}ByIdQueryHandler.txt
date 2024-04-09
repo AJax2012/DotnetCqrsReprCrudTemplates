@@ -1,0 +1,47 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+using ErrorOr;
+using MediatR;
+using Serilog;
+
+using CqrsTest.Application.Common.Contracts.Persistence;
+using CqrsTest.Domain.{{name}}AggregateRoot;
+
+namespace {{solutionName}}.Application.{{name|plural}}.Queries.GetById;
+
+/// <summary>
+/// Handler for getting a <see cref="{{name}}"/> by unique identifier.
+/// </summary>
+public sealed class Get{{name}}ByIdQueryHandler : IRequestHandler<Get{{name}}ByIdQuery, ErrorOr<{{name}}DetailsDto>>
+{
+    private readonly I{{name|plural}}Repository _{{name|lower|plural}}Repository;
+    private readonly ILogger _logger;
+
+    /// <summary>
+	/// Initializes a new instance of the <see cref="Get{{name}}ByIdQueryHandler"/> class.
+	/// </summary>
+	/// <param name="{{name|lower|plural}}Repository"><see cref="I{{name|plural}}Repository"/>.</param>
+	/// <param name="logger"><see cref="ILogger"/>.</param>
+    public Get{{name}}ByIdQueryHandler(I{{name|plural}}Repository {{name|lower|plural}}Repository, ILogger logger)
+    {
+        _{{name|lower|plural}}Repository = {{name|lower|plural}}Repository;
+        _logger = logger;
+    }
+    
+    /// <inheritdoc />
+    public async Task<ErrorOr<{{name}}DetailsDto>> Handle(Get{{name}}ByIdQuery request, CancellationToken cancellationToken)
+    {
+        var {{name|lower}} = await _{{name|lower|plural}}Repository.GetByIdAsync(request.{{name}}Id, cancellationToken);
+        
+        if ({{name|lower}} == null)
+        {
+            _logger.Information("{{name}} with id {{{name}}Id} not found", request.{{name}}Id);
+            return {{name}}Error.NotFound;
+        }
+        
+        return {{name|lower}}.ToDetailsDto();
+    }
+}
+

@@ -1,8 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using Swashbuckle.AspNetCore.Filters;
-using {{solutionName}}.Contracts.{{name}}.Requests;
 
-namespace {{solutionName}}.Contracts.{{name}}.Examples;
+using {{solutionName}}.Contracts.{{name|plural}}.Requests;
+
+namespace {{solutionName}}.Contracts.{{name|plural}}.Examples;
 
 /// <summary>
 /// Example for <see cref="Update{{name}}Request"/>.

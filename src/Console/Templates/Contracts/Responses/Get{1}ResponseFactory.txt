@@ -1,0 +1,18 @@
+using System.Collections.Immutable;
+using System.Linq;
+
+using {{solutionName}}.Application.{{name|plural}}.Queries.GetPaginated;
+
+namespace {{solutionName}}.Contracts.{{name|plural}}.Responses;
+
+/// <summary>
+/// Response for getting a paginated list of {{name|plural}}.
+/// </summary>
+public static class Get{{name|plural}}ResponseFactory
+{
+    public static Get{{name|plural}}Response ToResponse(this Paginated{{name|plural}}Dto dto) =>
+        new(dto.{{name|plural}}.Select(x => x.ToResource()).ToImmutableList(), dto.NextPageToken);
+        
+    private static {{name}}Resource ToResource(this {{name}}ListItemDto dto) =>
+        new(dto.Id);
+}

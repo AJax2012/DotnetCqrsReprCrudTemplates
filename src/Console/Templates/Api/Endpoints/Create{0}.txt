@@ -11,9 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
 using {{solutionName}}.Api.Endpoints.Common;
-using {{solutionName}}.Contracts.{{name}}.Requests;
+using {{solutionName}}.Application.{{name|plural}}.Commands.Create;
+using {{solutionName}}.Contracts.{{name|plural}}.Requests;
 
-namespace {{solutionName}}.Api.Endpoints.{{name}};
+namespace {{solutionName}}.Api.Endpoints.{{name|plural}};
 
 /// <summary>
 /// Endpoint handler for creating a {{name}}.
@@ -52,16 +53,12 @@ public static class Create{{name}}
             return errors.ToProblemDetailsResult();
         }
 
-        // var command = new Create{{name}}Command
-        // {
-        // };
+        var command = new Create{{name}}Command();
 
-        // var result = await mediator.Send(command, cancellationToken);
+        var result = await mediator.Send(command, cancellationToken);
         
-        // return response.Match(
-        //     success => Results.CreatedAtRoute("Get{{name}}ById", new { id = success.Id }),
-        //     errors => errors.ToProblemDetailsResult()
-        // );
-        return Results.Ok();
+        return result.Match(
+            id => Results.CreatedAtRoute("Get{{name}}ById", new { id = id }),
+            errors => errors.ToProblemDetailsResult());
     }
 }

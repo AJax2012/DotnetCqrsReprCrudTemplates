@@ -1,0 +1,31 @@
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+
+using {{solutionName}}.Application.Common.Services;
+using {{solutionName}}.Domain.{{name}}AggregateRoot;
+
+namespace {{solutionName}}.Application.{{name|plural}}.Queries.GetPaginated;
+
+/// <summary>
+/// Generates a paginated list of {{name|plural}} for the application layer.
+/// </summary>
+public static class Paginated{{name|plural}}DtoFactory
+{
+    /// <summary>
+    /// Generates a paginated list of {{name|plural}}.
+    /// </summary>
+	public static Paginated{{name|plural}}Dto ToPaginatedDto(this IReadOnlyList<{{name}}> {{name|lower|plural}})
+	{
+	    var lastItem = {{name|lower|plural}}.LastOrDefault();
+	    var nextPageDto = new Paginated{{name|plural}}NextPageDto();
+	    
+	    return new Paginated{{name|plural}}Dto({{name|plural}}: {{name|lower|plural}}.ToDtoList(), NextPageToken: nextPageDto.EncodeNextPageToken());
+    }
+
+	private static IReadOnlyList<{{name}}ListItemDto> ToDtoList(this IEnumerable<{{name}}> {{name|lower|plural}}) =>
+	    {{name|lower|plural}}.Select(x => x.ToListItemDto()).ToImmutableList();
+
+	private static {{name}}ListItemDto ToListItemDto(this {{name}} {{name|lower}}) =>
+	    new({{name|lower}}.Id);
+}

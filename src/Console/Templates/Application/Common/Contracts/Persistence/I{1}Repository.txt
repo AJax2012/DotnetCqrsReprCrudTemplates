@@ -1,0 +1,55 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Immutable;
+
+using {{solutionName}}.Application.{{name|plural}}.Queries.GetPaginated;
+using {{solutionName}}.Domain.{{name}}AggregateRoot;
+
+namespace {{solutionName}}.Application.Common.Contracts.Persistence;
+
+/// <summary>
+/// Persistence Repository for <see cref="{{name}}"/>.
+/// </summary>
+public interface I{{name|plural}}Repository
+{
+    /// <summary>
+	/// Creates <see cref="{{name}}"/>.
+	/// </summary>
+	/// <param name="{{name|lower}}"><see cref="{{name}}"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	/// <returns><see cref="Guid"/> Id.</returns>
+	Task<Guid> CreateAsync({{name}} {{name|lower}}, CancellationToken cancellationToken);
+	
+    /// <summary>
+    /// Get <see cref="{{name}}"/> by Id.
+    /// </summary>
+    /// <param name="id">The Id of the <see cref="{{name}}"/>.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The <see cref="{{name}}"/> entity.</returns>
+    Task<{{name}}?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Get paginated <see cref="{{name}}"/> entities.
+    /// </summary>
+    /// <param name="query">The query to get paginated <see cref="{{name}}"/> entities.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A paginated list of <see cref="{{name}}"/> entities.</returns>
+    Task<ImmutableList<{{name}}>?> GetPaginatedListAsync(Get{{name|plural}}PaginatedQuery query, CancellationToken cancellationToken);
+    
+    /// <summary>
+    /// Updates <see cref="{{name}}"/> by id.
+    /// </summary>
+    /// <param name="{{name}}"><see cref="{{name}}"/>.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+    /// <returns>Task.</returns>
+    Task UpdateAsync({{name}} {{name|lower}}, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Deletes <see cref="{{name}}"/> by id.
+    /// </summary>
+    /// <param name="id"><see cref="{{name}}"/> id.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+    /// <returns>Task.</returns>
+    Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+}

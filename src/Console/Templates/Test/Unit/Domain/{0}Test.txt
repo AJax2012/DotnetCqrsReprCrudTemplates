@@ -1,0 +1,15 @@
+using Bogus;
+using ErrorOr;
+using FluentAssertions;
+using Xunit;
+
+using {{solutionName}}.Domain.{{name}}AggregateRoot;
+
+namespace {{solutionName}}.Domain.Unit.Test.{{name}}AggregateRoot;
+
+/// <summary>
+/// Tests for <see cref="{{name}}"/>
+/// </summary>
+public class {{name}}Test
+{
+}

@@ -1,4 +1,4 @@
-namespace {{solutionName}}.Contracts.{{name}}.Requests;
+namespace {{solutionName}}.Contracts.{{name|plural}}.Requests;
 
 /// <summary>
 /// Request to create a new {{name}}.

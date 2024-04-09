@@ -1,0 +1,15 @@
+using System;
+using System.Diagnostics.CodeAnalysis;
+
+using ErrorOr;
+using MediatR;
+
+using {{solutionName}}.Domain.{{name}}AggregateRoot;
+
+namespace {{solutionName}}.Application.{{name|plural}}.Commands.Delete;
+
+/// <summary>
+/// Deletes <see cref="{{name}}"/>.
+/// </summary>
+[ExcludeFromCodeCoverage]
+public sealed record Delete{{name}}Command(Guid {{name}}Id, Guid CurrentUserId) : IRequest<ErrorOr<Deleted>>;

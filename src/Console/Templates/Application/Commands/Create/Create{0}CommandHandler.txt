@@ -1,0 +1,40 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+using ErrorOr;
+using MediatR;
+using Serilog;
+
+using {{solutionName}}.Domain.{{name}}AggregateRoot;
+using {{solutionName}}.Application.Common.Contracts.Persistence;
+
+namespace {{solutionName}}.Application.{{name|plural}}.Commands.Create;
+
+/// <summary>
+/// Handler for creating a <see cref="{{name}}"/>.
+/// </summary>
+public sealed class Create{{name}}CommandHandler : IRequestHandler<Create{{name}}Command, ErrorOr<Guid>>
+{
+    private readonly I{{name|plural}}Repository _{{name|lower|plural}}Repository;
+    private readonly ILogger _logger;
+
+    /// <summary>
+	/// Initializes a new instance of the <see cref="Create{{name}}CommandHandler"/> class.
+	/// </summary>
+	/// <param name="{{name|lower|plural}}Repository"><see cref="I{{name|plural}}Repository"/>.</param>
+	/// <param name="logger"><see cref="ILogger"/>.</param>
+    public Create{{name}}CommandHandler(I{{name|plural}}Repository {{name|lower|plural}}Repository, ILogger logger)
+    {
+        _{{name|lower|plural}}Repository = {{name|lower|plural}}Repository;
+        _logger = logger;
+    }
+    
+    /// <inheritdoc />
+    public async Task<ErrorOr<Guid>> Handle(Create{{name}}Command request, CancellationToken cancellationToken)
+    {
+        var {{name|lower}} = new {{name}}(Guid.NewGuid());
+        return await _{{name|lower|plural}}Repository.CreateAsync({{name|lower}}, cancellationToken);
+    }
+}
+

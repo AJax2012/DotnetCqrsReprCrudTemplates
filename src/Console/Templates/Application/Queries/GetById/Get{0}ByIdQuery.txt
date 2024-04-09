@@ -1,0 +1,13 @@
+using System;
+using System.Diagnostics.CodeAnalysis;
+
+using ErrorOr;
+using MediatR;
+
+namespace {{solutionName}}.Application.{{name|plural}}.Queries.GetById;
+
+/// <summary>
+/// Gets a <see cref="{{name}}"/> by unique identifier.
+/// </summary>
+[ExcludeFromCodeCoverage]
+public sealed record Get{{name}}ByIdQuery(Guid {{name}}Id, Guid CurrentUserId) : IRequest<ErrorOr<{{name}}DetailsDto>>;

@@ -1,0 +1,8 @@
+using System;
+
+namespace {{solutionName}}.Application.{{name|plural}}.Queries.GetById;
+
+/// <summary>
+/// A {{name}} with detailed information.
+/// </summary>
+public record {{name}}DetailsDto(Guid Id);

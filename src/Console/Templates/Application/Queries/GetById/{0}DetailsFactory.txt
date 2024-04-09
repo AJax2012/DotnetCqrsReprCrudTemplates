@@ -1,0 +1,17 @@
+using {{solutionName}}.Domain.{{name}}AggregateRoot;
+
+namespace {{solutionName}}.Application.{{name|plural}}.Queries.GetById;
+
+/// <summary>
+/// Factory for creating <see cref="{{name}}DetailsDto"/> from <see cref="{{name}}"/>.
+/// </summary>
+public static class {{name}}DetailsFactory
+{
+    /// <summary>
+    /// Converts a <see cref="{{name}}"/> to a <see cref="{{name}}DetailsDto"/>.
+    /// </summary>
+    /// <param name="{{name|lower}}"><see cref="{{name}}"/>.</param>
+    /// <returns></returns>
+    public static {{name}}DetailsDto ToDetailsDto(this {{name}} {{name|lower}}) =>
+        new {{name}}DetailsDto({{name|lower}}.Id);
+}

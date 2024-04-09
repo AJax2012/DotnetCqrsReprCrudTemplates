@@ -1,0 +1,47 @@
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+using ErrorOr;
+using MediatR;
+using Serilog;
+
+using {{solutionName}}.Application.Common.Contracts.Persistence;
+using {{solutionName}}.Domain.{{name}}AggregateRoot;
+
+namespace {{solutionName}}.Application.{{name|plural}}.Queries.GetPaginated;
+
+/// <summary>
+/// Handler for getting a paginated list of <see cref="{{name}}"/>.
+/// </summary>
+public sealed class Get{{name|plural}}PaginatedQueryHandler : IRequestHandler<Get{{name|plural}}PaginatedQuery, ErrorOr<Paginated{{name|plural}}Dto>>
+{
+    private readonly I{{name|plural}}Repository _{{name|lower|plural}}Repository;
+    private readonly ILogger _logger;
+
+    /// <summary>
+	/// Initializes a new instance of the <see cref="Get{{name|plural}}PaginatedQueryHandler"/> class.
+	/// </summary>
+	/// <param name="{{name|lower|plural}}Repository"><see cref="I{{name|plural}}Repository"/>.</param>
+	/// <param name="logger"><see cref="ILogger"/>.</param>
+    public Get{{name|plural}}PaginatedQueryHandler(I{{name|plural}}Repository {{name|lower|plural}}Repository, ILogger logger)
+    {
+        _{{name|lower|plural}}Repository = {{name|lower|plural}}Repository;
+        _logger = logger;
+    }
+    
+    /// <inheritdoc />
+    public async Task<ErrorOr<Paginated{{name|plural}}Dto>> Handle(Get{{name|plural}}PaginatedQuery request, CancellationToken cancellationToken)
+    {
+        var {{name|lower|plural}} = await _{{name|lower|plural}}Repository.GetPaginatedListAsync(request, cancellationToken);
+        
+        if ({{name|lower|plural}} is null || !{{name|lower|plural}}.Any())
+        {
+            _logger.Error("Failed to get paginated list of {{name}}.");
+            return {{name}}Error.NotFound;
+        }
+        
+        return {{name|lower|plural}}.ToPaginatedDto();
+    }
+}
+

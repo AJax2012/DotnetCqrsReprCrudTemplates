@@ -10,9 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
 using {{solutionName}}.Api.Endpoints.Common;
-using {{solutionName}}.Contracts.{{name}}.Requests;
+using {{solutionName}}.Application.{{name|plural}}.Commands.Delete;
+using {{solutionName}}.Contracts.{{name|plural}}.Requests;
 
-namespace {{solutionName}}.Api.Endpoints.{{name}};
+namespace {{solutionName}}.Api.Endpoints.{{name|plural}};
 
 /// <summary>
 /// Endpoint handler for deleting a {{name}}.
@@ -38,13 +39,11 @@ public static class Delete{{name}}
             return Results.Unauthorized();
         }
 
-        // var command = new Delete{{name}}Command(id, userId)
-        // var result = await mediator.Send(command, cancellationToken);
+        var command = new Delete{{name}}Command(id, userId);
+        var result = await mediator.Send(command, cancellationToken);
         
-        // return response.Match(
-        //     _ => Results.NoContent(),
-        //     errors => errors.ToProblemDetailsResult()
-        // );
-        return Results.NoContent();
+        return result.Match(
+            _ => Results.NoContent(),
+            errors => errors.ToProblemDetailsResult());
     }
 }

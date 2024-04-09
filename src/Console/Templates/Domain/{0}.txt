@@ -1,0 +1,22 @@
+using System;
+
+namespace {{solutionName}}.Domain.{{name}}AggregateRoot;
+
+/// <summary>
+/// {{name}} AggregateRoot.
+/// </summary>
+public class {{name}} 
+{
+    /// <summary>
+    /// {{name}} Id.
+    /// </summary>
+    public Guid Id { get; }
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="{{name}}"/> class.
+    /// </summary>
+    public {{name}}(Guid id)
+    {
+        Id = id;
+    }
+}

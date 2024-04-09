@@ -1,0 +1,12 @@
+using {{solutionName}}.Application.{{name|plural}}.Queries.GetById;
+
+namespace {{solutionName}}.Contracts.{{name|plural}}.Responses;
+
+/// <summary>
+/// Represents the response returned when a {{name}} is retrieved by its identifier.
+/// </summary>
+public static class Get{{name}}ByIdResponseFactory
+{
+    public static Get{{name}}ByIdResponse ToResponse(this {{name}}DetailsDto dto) =>
+        new(dto.Id);
+}

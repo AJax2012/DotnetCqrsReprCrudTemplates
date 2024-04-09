@@ -21,6 +21,6 @@ builder.Host.UseSerilog(logger);
 
 var app = builder.Build();
 
-app.AddCommands<CreateEndpoints>();
+app.AddCommands<CreateFilesCommand>();
 
 app.Run();

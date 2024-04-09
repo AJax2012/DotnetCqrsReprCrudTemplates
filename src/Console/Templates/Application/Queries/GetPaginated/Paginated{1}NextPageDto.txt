@@ -1,0 +1,10 @@
+using {{solutionName}}.Application.Common.Models;
+
+namespace {{solutionName}}.Application.{{name|plural}}.Queries.GetPaginated;
+
+/// <summary>
+/// Properties used to get the next page of {{name|plural}}.
+/// </summary>
+internal record Paginated{{name|plural}}NextPageDto : NextPageDto
+{
+}

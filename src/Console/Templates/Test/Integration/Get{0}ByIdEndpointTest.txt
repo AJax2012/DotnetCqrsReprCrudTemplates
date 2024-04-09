@@ -17,7 +17,7 @@ namespace {{solutionName}}.Integration.Test.{{name}}Endpoints;
 /// </summary>
 public class Get{{name}}ByIdEndpointTest : IClassFixture<{{factoryName}}>
 {
-    private const string BaseUrl = "api/{{name|lower}}s";
+    private const string BaseUrl = "api/{{name|lower|plural}}";
     private readonly HttpClient _client;
 	
 	/// <summary>

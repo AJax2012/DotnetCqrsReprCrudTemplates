@@ -9,27 +9,33 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
-namespace {{solutionName}}.Api.Endpoints.{{name}};
+using {{solutionName}}.Api.Endpoints.Common;
+using {{solutionName}}.Application.{{name|plural}}.Queries.GetPaginated;
+using {{solutionName}}.Contracts.{{name|plural}}.Responses;
+
+namespace {{solutionName}}.Api.Endpoints.{{name|plural}};
 
 /// <summary>
 /// Endpoint handler for getting a paginated list of {{name}}.
 /// </summary>
-public static class Get{{name}}s
+public static class Get{{name|plural}}
 {
     /// <summary>
     /// API request for getting a paginated list of {{name}}.
     /// </summary>
     /// <param name="limit">Number of results to retrieve.</param>
     /// <param name="orderBy">List of properties to order results by.</param>
-    /// <param name="isDescending">Sets orderBy to descending or ascending (descending by default).</param>
+    /// <param name="isDescending">Sets orderBy to descending or ascending (descending by default).</param>    
+    /// <param name="nextPageToken">Tokenized string to get the next page.</param>
     /// <param name="user"><see cref="ClaimsPrincipal"/>. Logged in user.</param>
     /// <param name="mediator"><see cref="ISender"/>.</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
     /// <returns><see cref="IResult"/>.</returns>
     public async static Task<IResult> HandleAsync(
         [FromQuery] int? limit,
-        [FromQuery] List<string>? orderBy,
+        [AsParameters] List<string>? orderBy,
         [FromQuery(Name = "desc")] bool? isDescending,
+        [FromQuery(Name = "next_page")] string nextPageToken,
         ClaimsPrincipal user,
         [FromServices] ISender mediator,
         CancellationToken cancellationToken)
@@ -39,20 +45,17 @@ public static class Get{{name}}s
             return Results.Unauthorized();
         }
 
-        // var query = new Get{{name}}sPaginatedQuery
-        // {
-        //      UserId = userId,
-        //      Limit = limit ?? 10,
-        //      OrderBy = orderBy ?? new List<string>(),
-        //      IsDescending = isDescending ?? true
-        //};
+        var query = new Get{{name|plural}}PaginatedQuery(
+            userId,
+            limit ?? 10,
+            orderBy ?? new List<string>(),
+            isDescending ?? true,
+            nextPageToken);
         
-        // var result = await mediator.Send(query, cancellationToken);
+        var result = await mediator.Send(query, cancellationToken);
         
-        // return response.Match(
-        //     {{name|lower}} => Results.Ok({{name|lower}}.ToResponse()),
-        //     errors => errors.ToProblemDetailsResult()
-        // );
-        return Results.Ok();
+        return result.Match(
+            {{name|lower}} => Results.Ok({{name|lower}}.ToResponse()),
+            errors => errors.ToProblemDetailsResult());
     }
 }

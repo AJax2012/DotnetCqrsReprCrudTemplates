@@ -1,0 +1,34 @@
+using System.Threading;
+using System.Threading.Tasks;
+
+using AutoBogus;
+using ErrorOr;
+using FluentAssertions;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+using Serilog;
+using Xunit;
+
+using {{solutionName}}.Application.Common.Contracts.Persistence;
+using {{solutionName}}.Application.{{name|plural}}.Commands.Delete;
+
+namespace {{solutionName}}.Application.Unit.Test.{{name}}.Commands;
+
+/// <summary>
+/// Tests for <see cref="Delete{{name}}CommandHandler"/>.
+/// </summary>
+public class Delete{{name}}CommandHandlerTest
+{
+    private readonly Delete{{name}}CommandHandler _sut;
+    private readonly I{{name|plural}}Repository _{{name|lower|plural}}Repository = Substitute.For<I{{name|plural}}Repository>();
+    private readonly ILogger _logger = Substitute.For<ILogger>();
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Delete{{name}}CommandHandlerTest"/> class.
+    /// </summary>
+    public Delete{{name}}CommandHandlerTest()
+    {
+        _sut = new Delete{{name}}CommandHandler(_{{name|lower|plural}}Repository, _logger);
+    }
+}
+

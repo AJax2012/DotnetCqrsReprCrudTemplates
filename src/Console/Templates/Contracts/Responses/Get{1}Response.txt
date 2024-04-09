@@ -1,0 +1,8 @@
+using System.Collections.Immutable;
+
+namespace {{solutionName}}.Contracts.{{name|plural}}.Responses;
+
+/// <summary>
+/// Response for getting a paginated list of {{name|plural}}.
+/// </summary>
+public record Get{{name|plural}}Response(ImmutableList<{{name}}Resource> {{name|plural}}, string NextPageToken);

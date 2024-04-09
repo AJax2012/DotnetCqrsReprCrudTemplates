@@ -1,0 +1,19 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+
+using ErrorOr;
+using MediatR;
+
+namespace {{solutionName}}.Application.{{name|plural}}.Queries.GetPaginated;
+
+/// <summary>
+/// Gets a paginated list of <see cref="{{name}}"/>.
+/// </summary>
+[ExcludeFromCodeCoverage]
+public sealed record Get{{name|plural}}PaginatedQuery(
+    Guid CurrentUserId, 
+    int Limit, 
+    List<string> OrderBy, 
+    bool IsDescending,
+    string? NextPageToken) : IRequest<ErrorOr<Paginated{{name|plural}}Dto>>;

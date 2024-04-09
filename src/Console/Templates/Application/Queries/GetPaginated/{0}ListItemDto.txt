@@ -1,0 +1,8 @@
+using System;
+
+namespace {{solutionName}}.Application.{{name|plural}}.Queries.GetPaginated;
+
+/// <summary>
+/// A {{name}} with list item information.
+/// </summary>
+public record {{name}}ListItemDto(Guid Id);

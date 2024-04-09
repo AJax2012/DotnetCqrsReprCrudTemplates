@@ -1,0 +1,27 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
+using Swashbuckle.AspNetCore.Filters;
+
+using {{solutionName}}.Contracts.{{name|plural}}.Responses;
+
+namespace {{solutionName}}.Contracts.{{name|plural}}.Examples;
+
+/// <summary>
+/// Example for <see cref="Get{{name|plural}}Response"/>.
+/// </summary>
+[ExcludeFromCodeCoverage(Justification = "Examples cannot be tested.")]
+public class Get{{name|plural}}ResponseExample : IExamplesProvider<Get{{name|plural}}Response>
+{
+    /// <inheritdoc />
+    public Get{{name|plural}}Response GetExamples()
+    {
+        return new Get{{name|plural}}Response(
+            new List<{{name}}Resource>
+            {
+                new(Guid.NewGuid()),
+            }.ToImmutableList(), 
+            "nextPageToken");
+    }
+}

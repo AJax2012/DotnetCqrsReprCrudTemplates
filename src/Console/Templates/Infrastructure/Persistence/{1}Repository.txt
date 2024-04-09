@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Threading;
+using System.Threading.Tasks;
+
+using {{solutionName}}.Application.Common.Contracts.Persistence;
+using {{solutionName}}.Application.{{name|plural}}.Queries.GetPaginated;
+using {{solutionName}}.Domain.{{name}}AggregateRoot;
+
+namespace {{solutionName}}.Infrastructure.Persistence.{{name|plural}};
+
+/// <inheritdoc />
+public class {{name|plural}}Repository : I{{name|plural}}Repository
+{
+    /// <inheritdoc />
+    public Task<Guid> CreateAsync({{name}} {{name|lower}}, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public Task<{{name}}?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public Task<ImmutableList<{{name}}>?> GetPaginatedListAsync(Get{{name|plural}}PaginatedQuery query, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public Task UpdateAsync({{name}} {{name|lower}}, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+}
