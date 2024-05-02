@@ -17,6 +17,7 @@ public class {{name}}Endpoints : IFeatureEndpoints
     {
         app.MapGroup("api/{{name|plural}}")
             .WithTags(["{{name}}"])
+            .RequireAuthorization()
             .MapEndpoint<Create{{name}}>()
             .MapEndpoint<Get{{name}}ById>()
             .MapEndpoint<Get{{name|plural}}>()
