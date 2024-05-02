@@ -4,12 +4,14 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
-using ErrorOr;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 
-using {{solutionName}}.Api.Endpoints.Common;
+using {{solutionName}}.Api.Endpoints.Common.Contracts;
+using {{solutionName}}.Api.Endpoints.Common.Extensions;
 using {{solutionName}}.Application.{{name|plural}}.Queries.GetPaginated;
 using {{solutionName}}.Contracts.{{name|plural}}.Responses;
 
@@ -18,8 +20,15 @@ namespace {{solutionName}}.Api.Endpoints.{{name|plural}};
 /// <summary>
 /// Endpoint handler for getting a paginated list of {{name}}.
 /// </summary>
-public static class Get{{name|plural}}
+public class Get{{name|plural}} : IEndpoint
 {
+    /// <inheritdoc />
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app) => app
+        .MapGet("/", HandleAsync)
+        .Produces<Get{{name|plural}}Response>(StatusCodes.Status200OK, "application/json")
+        .ProducesProblem(StatusCodes.Status404NotFound, "application/json")
+        .WithName("Get{{name|plural}}");
+
     /// <summary>
     /// API request for getting a paginated list of {{name}}.
     /// </summary>

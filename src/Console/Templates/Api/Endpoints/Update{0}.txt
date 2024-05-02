@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,10 +9,13 @@ using ErrorOr;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 
-using {{solutionName}}.Api.Endpoints.Common;
+using {{solutionName}}.Api.Endpoints.Common.Contracts;
+using {{solutionName}}.Api.Endpoints.Common.Extensions;
 using {{solutionName}}.Application.{{name|plural}}.Commands.Update;
 using {{solutionName}}.Contracts.{{name|plural}}.Requests;
 
@@ -20,8 +24,18 @@ namespace {{solutionName}}.Api.Endpoints.{{name|plural}};
 /// <summary>
 /// Endpoint handler for updating a {{name}}.
 /// </summary>
-public static class Update{{name}}
+public class Update{{name}} : IEndpoint
 {
+    /// <inheritdoc />
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app) => app
+        .MapPut("{id:guid}", HandleAsync)
+        .WithRequestValidation<Update{{name}}Request>()
+        .Accepts<Update{{name}}Request>("application/json")
+        .Produces(StatusCodes.Status204NoContent)
+        .ProducesValidationProblem(StatusCodes.Status400BadRequest, "application/json")
+        .ProducesProblem(StatusCodes.Status404NotFound, "application/json")
+        .WithName("Update{{name}}");
+
     /// <summary>
     /// API request for updating a {{name}}.
     /// </summary>
@@ -37,28 +51,17 @@ public static class Update{{name}}
         [FromBody] Update{{name}}Request request,
         ClaimsPrincipal user,
         [FromServices] ISender mediator,
-        [FromServices] IValidator<Update{{name}}Request> validator, 
         CancellationToken cancellationToken)
     {
         if (!Guid.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out var userId) && userId != Guid.Empty)
         {
             return Results.Unauthorized();
         }
-    
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
         
         if (id == Guid.Empty)
         {
-            validationResult.Errors.Add(new ValidationFailure("Update{{name}}.IdRequired", "Id is required"));
-        }
-        
-        if (!validationResult.IsValid)
-        {
-            var errors = validationResult.Errors
-                .Select(e => Error.Validation(e.ErrorCode, e.ErrorMessage))
-                .ToList();
-                
-            return errors.ToProblemDetailsResult();
+            var error = Error.Validation(code: "UpdateProfile.IdRequired", description: "Id is required.");
+            return new List<Error> { error }.ToProblemDetailsResult();
         }
 
         var command = new Update{{name}}Command(id, userId);

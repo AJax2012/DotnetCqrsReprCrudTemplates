@@ -1,25 +1,34 @@
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
 
 using ErrorOr;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 
-using {{solutionName}}.Api.Endpoints.Common;
+using {{solutionName}}.Api.Endpoints.Common.Contracts;
+using {{solutionName}}.Api.Endpoints.Common.Extensions;
 using {{solutionName}}.Application.{{name|plural}}.Commands.Delete;
-using {{solutionName}}.Contracts.{{name|plural}}.Requests;
 
 namespace {{solutionName}}.Api.Endpoints.{{name|plural}};
 
 /// <summary>
 /// Endpoint handler for deleting a {{name}}.
 /// </summary>
-public static class Delete{{name}}
+public class Delete{{name}} : IEndpoint
 {
+    /// <inheritdoc />
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app) => app
+        .MapDelete("{id:guid}", HandleAsync)
+        .Produces(StatusCodes.Status204NoContent)
+        .ProducesProblem(StatusCodes.Status404NotFound, "application/json")
+        .WithName("Delete{{name}}");
+
     /// <summary>
     /// API request for deleting a {{name}}.
     /// </summary>
@@ -37,6 +46,12 @@ public static class Delete{{name}}
         if (!Guid.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out var userId) && userId != Guid.Empty)
         {
             return Results.Unauthorized();
+        }
+        
+        if (id == Guid.Empty)
+        {
+            var error = Error.Validation(code: "Delete{{name}}.IdRequired", description: "Id is required.");
+            return new List<Error> { error }.ToProblemDetailsResult();
         }
 
         var command = new Delete{{name}}Command(id, userId);

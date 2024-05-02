@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 using ErrorOr;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 
-using {{solutionName}}.Api.Endpoints.Common;
+using {{solutionName}}.Api.Endpoints.Common.Contracts;
+using {{solutionName}}.Api.Endpoints.Common.Extensions;
 using {{solutionName}}.Application.{{name|plural}}.Queries.GetById;
 using {{solutionName}}.Contracts.{{name|plural}}.Responses;
 
@@ -18,8 +21,15 @@ namespace {{solutionName}}.Api.Endpoints.{{name|plural}};
 /// <summary>
 /// Endpoint handler for getting a {{name}} by id.
 /// </summary>
-public static class Get{{name}}ById
+public class Get{{name}}ById : IEndpoint
 {
+    /// <inheritdoc />
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app) => app
+        .MapGet("{id:guid}", HandleAsync)
+        .Produces<Get{{name}}ByIdResponse>(StatusCodes.Status200OK, "application/json")
+        .ProducesProblem(StatusCodes.Status404NotFound, "application/json")
+        .WithName("Get{{name}}ById");
+            
     /// <summary>
     /// API request for getting a {{name}} by id.
     /// </summary>

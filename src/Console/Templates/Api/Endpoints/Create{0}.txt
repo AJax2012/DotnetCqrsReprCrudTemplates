@@ -2,15 +2,15 @@ using System;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
 
-using ErrorOr;
-using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 
-using {{solutionName}}.Api.Endpoints.Common;
+using {{solutionName}}.Api.Endpoints.Common.Contracts;
+using {{solutionName}}.Api.Endpoints.Common.Extensions;
 using {{solutionName}}.Application.{{name|plural}}.Commands.Create;
 using {{solutionName}}.Contracts.{{name|plural}}.Requests;
 
@@ -19,22 +19,29 @@ namespace {{solutionName}}.Api.Endpoints.{{name|plural}};
 /// <summary>
 /// Endpoint handler for creating a {{name}}.
 /// </summary>
-public static class Create{{name}}
+public class Create{{name}} : IEndpoint
 {
+    /// <inheritdoc />
+    public static RouteHandlerBuilder Map(IEndpointRouteBuilder app) => app
+        .MapPost("/", HandleAsync)
+        .WithRequestValidation<Create{{name}}Request>()
+        .Accepts<Create{{name}}Request>("application/json")
+        .Produces(StatusCodes.Status201Created)
+        .ProducesProblem(StatusCodes.Status409Conflict, "application/json")
+        .WithName("Create{{name}}");
+
     /// <summary>
     /// API request for creating a {{name}}.
     /// </summary>
     /// <param name="request"><see cref="Create{{name}}Request"/>.</param>
     /// <param name="user"><see cref="ClaimsPrincipal"/>. Logged in user.</param>
     /// <param name="mediator"><see cref="ISender"/>.</param>
-    /// <param name="validator">Validator for <see cref="Create{{name}}Request"/>.</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
     /// <returns><see cref="IResult"/>.</returns>
     public async static Task<IResult> HandleAsync(
         [FromBody] Create{{name}}Request request,
         ClaimsPrincipal user,
         [FromServices] ISender mediator,
-        [FromServices] IValidator<Create{{name}}Request> validator, 
         CancellationToken cancellationToken)
     {
         if (!Guid.TryParse(user.FindFirstValue(ClaimTypes.NameIdentifier), out var userId) && userId != Guid.Empty)
@@ -42,17 +49,6 @@ public static class Create{{name}}
             return Results.Unauthorized();
         }
     
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-        
-        if (!validationResult.IsValid)
-        {
-            var errors = validationResult.Errors
-                .Select(e => Error.Validation(e.ErrorCode, e.ErrorMessage))
-                .ToList();
-                
-            return errors.ToProblemDetailsResult();
-        }
-
         var command = new Create{{name}}Command();
 
         var result = await mediator.Send(command, cancellationToken);
