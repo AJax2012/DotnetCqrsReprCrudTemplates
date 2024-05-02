@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Text.RegularExpressions;
 using Cocona;
 using DotnetCqrsClassTemplatesUtility.Console.Models;
 using Humanizer;
@@ -6,7 +7,7 @@ using Spectre.Console;
 
 namespace DotnetCqrsClassTemplatesUtility.Console.Commands;
 
-public class CreateFilesCommand()
+public partial class CreateFilesCommand()
 {
 	private readonly Dictionary<string, ImmutableList<string>> _files = new()
 	{
@@ -66,7 +67,8 @@ public class CreateFilesCommand()
 		var solutionName = Path.GetFileNameWithoutExtension(Directory.EnumerateFiles(projectPath, "*.sln").First());
 		
 		GenerateFiles(projectPath, name, solutionName, integrationTestProjectName);
-
+		AddRepositoryDependency(projectPath, name, solutionName);
+		
 		AnsiConsole.Write(new Text("Files generated successfully.", new Style(Color.Green)));
 
 		if (!dryRun)
@@ -75,6 +77,88 @@ public class CreateFilesCommand()
 		}
 		
 		return Task.CompletedTask;
+	}
+
+	private static void AddRepositoryDependency(string projectPath, string name, string solutionName)
+	{
+		var pluralizedName = name.Pluralize();
+		var dependencyLine = string.Format("        services.AddScoped<I{0}Repository, {0}Repository>();", pluralizedName);
+		var infrastructureModuleFileContents = File.ReadLines(Path.Join(projectPath, "src/Infrastructure/Loaders/InfrastructureModule.cs")).ToList();
+
+		if (infrastructureModuleFileContents.Contains(dependencyLine))
+		{
+			return;
+		}
+
+		AddUsingLines(solutionName, infrastructureModuleFileContents, pluralizedName);
+		AddRepositoryLines(infrastructureModuleFileContents, dependencyLine);
+		
+		File.WriteAllLines(Path.Join(projectPath, "src/Infrastructure/Loaders/InfrastructureModule.cs"), infrastructureModuleFileContents);
+	}
+
+	private static void AddRepositoryLines(List<string> infrastructureModuleFileContents, string dependencyLine)
+	{
+		var indexOfReturnLine = infrastructureModuleFileContents.FindLastIndex(x => x.Contains("return services;"));
+		var lineBeforeReturnIsEmpty = string.IsNullOrWhiteSpace(infrastructureModuleFileContents.ElementAt(indexOfReturnLine - 1));
+
+		if (!lineBeforeReturnIsEmpty)
+		{
+			infrastructureModuleFileContents.Insert(indexOfReturnLine, "");
+		}
+		
+		var indexOfRegisterDependenciesMethod = infrastructureModuleFileContents.FindIndex(x => 
+			x.Contains("private static IServiceCollection RegisterDependencies(this IServiceCollection services)"));
+		
+		var originalDependencyLines = infrastructureModuleFileContents
+			.Skip(indexOfRegisterDependenciesMethod + 1)
+			.Take(indexOfReturnLine - indexOfRegisterDependenciesMethod)
+			.Where(x => x.Contains("services.Add"))
+			.ToList();
+		
+		if (originalDependencyLines.Count == 0)
+		{
+			infrastructureModuleFileContents.Insert(lineBeforeReturnIsEmpty ? indexOfReturnLine - 1 : indexOfReturnLine, dependencyLine);
+			return;
+		}
+
+		var newDependencyLines = originalDependencyLines.ConvertAll(x => x);
+		newDependencyLines.Add(dependencyLine);
+		
+		// Sort by last word in dependency generic array.
+		newDependencyLines = newDependencyLines.OrderBy(x => DependencyEndRegexMatch().Match(x).Groups[0].Value).ToList();
+		
+		var indexOfFirstDependencyLine = infrastructureModuleFileContents.FindIndex(x => x.Equals(originalDependencyLines.First()));
+		var indexOfLastDependencyLine = infrastructureModuleFileContents.FindLastIndex(x => x.Equals(originalDependencyLines.Last()));
+		infrastructureModuleFileContents.RemoveRange(indexOfFirstDependencyLine, indexOfLastDependencyLine - indexOfFirstDependencyLine + 1);
+		infrastructureModuleFileContents.InsertRange(indexOfFirstDependencyLine, newDependencyLines);
+	}
+
+	private static void AddUsingLines(string solutionName, List<string> infrastructureModuleFileContents, string pluralizedName)
+	{
+
+		var originalSolutionImportLines = infrastructureModuleFileContents.Where(x => x.StartsWith($"using {solutionName}")).ToList() ?? [];
+		var newSolutionImportLines = originalSolutionImportLines.ConvertAll(x => x);
+		
+		if (!originalSolutionImportLines.Contains($"using {solutionName}.Application.Common.Contracts.Persistence;"))
+		{
+			newSolutionImportLines.Add($"using {solutionName}.Application.Common.Contracts.Persistence;");
+		}
+		
+		newSolutionImportLines.Add($"using {solutionName}.Infrastructure.Persistence.{pluralizedName};");
+		newSolutionImportLines.Sort();
+
+		if (originalSolutionImportLines.Count == 0)
+		{
+			var indexOfNamespaceLine = infrastructureModuleFileContents.FindIndex(x => x.StartsWith("namespace"));
+			infrastructureModuleFileContents.Insert(indexOfNamespaceLine, "");
+			infrastructureModuleFileContents.InsertRange(indexOfNamespaceLine, newSolutionImportLines);
+			return;
+		}
+		
+		var indexOfFirstSolutionImportLine = infrastructureModuleFileContents.FindIndex(x => x.Equals(originalSolutionImportLines.First()));
+		var indexOfLastSolutionImportLine = infrastructureModuleFileContents.FindLastIndex(x => x.Equals(originalSolutionImportLines.Last()));
+		infrastructureModuleFileContents.RemoveRange(indexOfFirstSolutionImportLine, indexOfLastSolutionImportLine - indexOfFirstSolutionImportLine + 1);
+		infrastructureModuleFileContents.InsertRange(indexOfFirstSolutionImportLine, newSolutionImportLines);
 	}
 
 	private void GenerateFiles(
@@ -136,7 +220,6 @@ public class CreateFilesCommand()
 
 	private static string GetNameFromUser()
 	{
-
 		var name = AnsiConsole.Prompt(
 			new TextPrompt<string>("What would you like to name your new endpoint group?")
 				.PromptStyle("green")
@@ -144,7 +227,8 @@ public class CreateFilesCommand()
 					ValidationResult.Error("Please enter a valid name.") : 
 					ValidationResult.Success())
 				.WithConverter(x => x.Trim().Dehumanize()));
-		return name;
+		
+		return name.Singularize().Dehumanize();
 	}
 
 	private static bool IsValidEndpointName(string projectPath, string name)
@@ -284,4 +368,7 @@ public class CreateFilesCommand()
 			.PadTop(0)
 			.PadBottom(0));
 	}
+
+    [GeneratedRegex(@"(\w*)>\(\)")]
+    private static partial Regex DependencyEndRegexMatch();
 }
