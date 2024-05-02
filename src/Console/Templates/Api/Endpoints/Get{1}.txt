@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Routing;
 using {{solutionName}}.Api.Endpoints.Common.Contracts;
 using {{solutionName}}.Api.Endpoints.Common.Extensions;
 using {{solutionName}}.Application.{{name|plural}}.Queries.GetPaginated;
+using {{solutionName}}.Contracts.{{name|plural}}.Requests;
 using {{solutionName}}.Contracts.{{name|plural}}.Responses;
 
 namespace {{solutionName}}.Api.Endpoints.{{name|plural}};
@@ -25,6 +26,7 @@ public class Get{{name|plural}} : IEndpoint
     /// <inheritdoc />
     public static RouteHandlerBuilder Map(IEndpointRouteBuilder app) => app
         .MapGet("/", HandleAsync)
+        .Accepts<Get{{name|plural}}Request>("application/json")
         .Produces<Get{{name|plural}}Response>(StatusCodes.Status200OK, "application/json")
         .ProducesProblem(StatusCodes.Status404NotFound, "application/json")
         .WithName("Get{{name|plural}}");
@@ -41,10 +43,7 @@ public class Get{{name|plural}} : IEndpoint
     /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
     /// <returns><see cref="IResult"/>.</returns>
     public async static Task<IResult> HandleAsync(
-        [FromQuery] int? limit,
-        [AsParameters] List<string>? orderBy,
-        [FromQuery(Name = "desc")] bool? isDescending,
-        [FromQuery(Name = "next_page")] string nextPageToken,
+        [AsParameters] Get{{name|plural}}Request request,
         ClaimsPrincipal user,
         [FromServices] ISender mediator,
         CancellationToken cancellationToken)
@@ -56,10 +55,10 @@ public class Get{{name|plural}} : IEndpoint
 
         var query = new Get{{name|plural}}PaginatedQuery(
             userId,
-            limit ?? 10,
-            orderBy ?? new List<string>(),
-            isDescending ?? true,
-            nextPageToken);
+            request.Limit ?? 10,
+            request.OrderBy?.ToList() ?? [],
+            request.IsDescending ?? true,
+            request.NextPageToken);
         
         var result = await mediator.Send(query, cancellationToken);
         

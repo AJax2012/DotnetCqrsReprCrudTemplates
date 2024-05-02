@@ -1,0 +1,34 @@
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+
+namespace {{solutionName}}.Contracts.{{name|plural}}.Requests;
+
+/// <summary>
+/// Request to get a paginated list of {{name|plural}}.
+/// </summary>
+public record Get{{name|plural}}Request(
+	[FromQuery(Name = "limit")] int? Limit,
+	[FromQuery(Name = "orderBy")] string[]? OrderBy,
+	[FromQuery(Name = "isDescending")] bool? IsDescending,
+	[FromQuery(Name = "next_page")] string? NextPageToken)
+{
+	public static bool TryParse(string? query, out Get{{name|plural}}Request? request)
+	{
+		request = null;
+
+		if (query == null)
+		{
+			return false;
+		}
+
+		try
+		{
+			request = JsonConvert.DeserializeObject<Get{{name|plural}}Request>(query)!;
+			return true;
+		}
+		catch
+		{
+			return false;
+		}
+	}
+}

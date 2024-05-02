@@ -12,7 +12,7 @@ public class CreateFilesCommand()
 	{
 		{ "Endpoints", ["Create{0}", "Delete{0}", "Get{1}", "Get{0}ById", "Update{0}", "{0}Endpoints"] },
 		{ "Examples", ["Create{0}RequestExample", "Get{1}ResponseExample", "Get{0}ByIdResponseExample", "Update{0}RequestExample"] },
-		{ "Requests", ["Create{0}Request", "Update{0}Request"] },
+		{ "Requests", ["Create{0}Request", "Get{1}Request", "Update{0}Request"] },
 		{ "Responses", ["{0}Resource", "Get{1}Response", "Get{0}ByIdResponse", "Get{0}ByIdResponseFactory", "Get{1}ResponseFactory"] },
 		{ "Validators", ["Create{0}RequestValidator", "Update{0}RequestValidator"] },
 		{ "Commands/Create", ["Create{0}Command", "Create{0}CommandHandler"] },
@@ -29,10 +29,9 @@ public class CreateFilesCommand()
 		{ "Test/Unit/Domain", ["{0}Test"] },
 	};
 
-	public Task CreateFiles([Option("dryRun", ['u'], Description = "Prints out what files would be auto-generated.")]bool dryRun = true)
+	public Task CreateFiles([Option("path", ['p'])] string path,[Option("dryRun", ['u'], Description = "Prints out what files would be auto-generated.")]bool dryRun = true)
 	{
-		// TODO: Delete tempProjectPath and replace with actual path.
-		var projectPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Developer/CqrsTest");
+		var projectPath = Path.GetFullPath(path); //Path.Join(Assembly.GetExecutingAssembly().Location, path);
 		
 		ValidateProjectFiles(projectPath);
 		var name = GetNameFromUser();
