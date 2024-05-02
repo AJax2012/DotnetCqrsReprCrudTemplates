@@ -160,9 +160,14 @@ public class CreateFilesCommand()
 
 	private static void ValidateProjectFiles(string path)
 	{
+		if (!Directory.Exists(path))
+		{
+			throw new DirectoryNotFoundException($"The directory ({path}) does not exist. Please make sure you are in the correct directory.");
+		}
+		
 		if (!Directory.EnumerateFiles(path, "*.sln").Any())
 		{
-			throw new DirectoryNotFoundException("The solution file does not exist. Please make sure you are in the correct directory.");
+			throw new FileNotFoundException("The solution file does not exist. Please make sure you are in the correct directory.");
 		}
 		
 		var apiPath = Path.Join(path, "src/Api");
