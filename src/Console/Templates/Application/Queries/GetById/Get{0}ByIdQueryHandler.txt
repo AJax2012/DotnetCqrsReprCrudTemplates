@@ -6,8 +6,8 @@ using ErrorOr;
 using MediatR;
 using Serilog;
 
-using CqrsTest.Application.Common.Contracts.Persistence;
-using CqrsTest.Domain.{{name}}AggregateRoot;
+using {{solutionName}}.Application.Common.Contracts.Persistence;
+using {{solutionName}}.Domain.{{name}}AggregateRoot;
 
 namespace {{solutionName}}.Application.{{name|plural}}.Queries.GetById;
 
