@@ -6,4 +6,4 @@
 
 namespace DotnetCqrsClassTemplatesUtility.Console.Models;
 
-public record Template(string TemplatePath, string Name, string SolutionName, string? ApiFactoryName = null);
+public record Template(string TemplatePath, string Name, string SolutionName, string ApiFactoryName = null);
