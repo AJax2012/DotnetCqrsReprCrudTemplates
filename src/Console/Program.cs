@@ -1,11 +1,11 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using Cocona;
-using DotnetCqrsClassTemplatesUtility.Console.Commands;
+﻿using Cocona;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SpectreConsole;
+
+using DotnetCqrsClassTemplatesUtility.Console.Commands;
+
 using ILogger = Serilog.ILogger;
 
 var builder = CoconaApp.CreateBuilder();

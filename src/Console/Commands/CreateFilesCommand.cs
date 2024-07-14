@@ -1,9 +1,16 @@
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+
 using Cocona;
-using DotnetCqrsClassTemplatesUtility.Console.Models;
 using Humanizer;
 using Spectre.Console;
+
+using DotnetCqrsClassTemplatesUtility.Console.Models;
 
 namespace DotnetCqrsClassTemplatesUtility.Console.Commands;
 
@@ -30,9 +37,12 @@ public partial class CreateFilesCommand()
 		{ "Test/Unit/Domain", ["{0}Test"] },
 	};
 
-	public Task CreateFiles([Option("path", ['p'])] string path,[Option("dryRun", ['u'], Description = "Prints out what files would be auto-generated.")]bool dryRun = true)
+	public Task CreateFiles(
+		[Option("path", ['p'])] string path, 
+		[Option("dryRun", ['u'], Description = "Prints out what files would be auto-generated.")] bool dryRun = true
+	)
 	{
-		var projectPath = Path.GetFullPath(path); //Path.Join(Assembly.GetExecutingAssembly().Location, path);
+		var projectPath = Path.Join(Directory.GetCurrentDirectory(), path);
 		
 		ValidateProjectFiles(projectPath);
 		var name = GetNameFromUser();
