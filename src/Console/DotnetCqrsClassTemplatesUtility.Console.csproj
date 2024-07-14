@@ -3,12 +3,13 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
     <PackAsTool>true</PackAsTool>
-    <ToolCommandName>ajax2012.cqrs-templates</ToolCommandName>
+    <PackageType>DotnetCliTool</PackageType>
+    <ToolCommandName>cqrs-repr-templates</ToolCommandName>
     <PackageOutputPath>./nupkg</PackageOutputPath>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Adam Garder</Authors>
+    <Description>Dotnet tool for creating templates for Dotnet-8-Cqrs-Template</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,5 +31,11 @@
   <ItemGroup>
     <Folder Include="Templates\Api\" />
   </ItemGroup>
+
+  <Target Name="InstallTool" DependsOnTargets="Pack">
+    <Exec Command="dotnet tool uninstall --global $(ToolCommandName)" IgnoreExitCode="true" />
+    <Exec Command="dotnet tool install --global --add-source $(PackageOutputPath) $(ToolCommandName)" />
+    <Exec Command="$(ToolCommandName) --help" />
+  </Target>
 
 </Project>
